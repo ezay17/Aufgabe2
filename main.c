@@ -77,13 +77,12 @@ void put_entry(Listnode *pStart, int position, int aktdata) {
     }
 
     // neues Objekt erstellen
-    Listnode *temp, *p;
+    Listnode *p;
     p = (Listnode *) malloc(sizeof(Listnode));
     p->daten = aktdata;
     p->pNext = NULL;
-    temp = p;
-    *temp = *p;
-    printf("Pointer in der Funktion: %p und %p\n", pStart, temp);
+    pStart = p;
+    printf("Pointer in der Funktion: %p und %p\n", pStart, p);
 
     // neue Liste erstellen, falls pStart NULL ist
     /*
