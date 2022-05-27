@@ -28,11 +28,11 @@ enum DIRECTION { FORWARD, REVERSE } direction;
 /* Fehler sollten durch die Rückgabe eines negativen Statuscodes   */
 /* kenntlich gemacht werden. */
 void put_entry(Listnode *pStart, int position, int aktdata);  /* Eintrag einfuegen */
-int del_entry(int position);               /* Eintrag Loeschen  */
+int del_entry(Listnode *pStart, int position);                  /* Eintrag Loeschen  */
 int find_entry(int value);                 /* Eintrag suchen    */
-void del_list(void);                       /* Liste loeschen    */
-int get_anzentries(Listnode *pStart);                  /* Anzahl ermitteln  */
-int printall(enum DIRECTION direction);    /* Liste ausgeben    */
+void del_list(Listnode *pStart);                                /* Liste loeschen    */
+int get_anzentries(Listnode *pStart);                           /* Anzahl ermitteln  */
+int printall(Listnode *pStart, enum DIRECTION direction);       /* Liste ausgeben    */
 
 
 int main(void) {
@@ -40,13 +40,9 @@ int main(void) {
     Listnode bsp1, bsp2, bsp3, bsp4;
     Listnode *pStart = NULL;
 
-    printf("Pointer-Inhalt = %p\n", pStart);
-    printf("Amount of elements in this list: %d\n", get_anzentries(pStart));
-    put_entry(pStart, 0, 12);
-    printf("Pointer-Inhalt = %p\n", pStart);
-    printf("Amount of elements in this list: %d\n", get_anzentries(pStart));
+    printf("Erstellen:\n");
+    printall(pStart, FORWARD);
 
-    /*
     pStart = &bsp1;
     bsp1.daten = 10;
     bsp1.pNext = &bsp2;
@@ -56,9 +52,14 @@ int main(void) {
     bsp3.pNext = &bsp4;
     bsp4.daten = 40;
     bsp4.pNext = NULL;
-    */
 
-    printf("Amount of elements in this list: %d\n", get_anzentries(pStart));
+    printf("Zuweisen:\n");
+    printall(pStart, FORWARD);
+
+    printf("Loeschen:\n");
+    del_entry(pStart, 1);
+    printall(pStart, FORWARD);
+
 
     return 0;
 }
@@ -101,9 +102,22 @@ void put_entry(Listnode *pStart, int position, int aktdata) {
 *  Return:    0          = alles OK
 *         negative Werte = Fehler
 */
-int printall(enum DIRECTION direction)
-{
-    return NOT_IMPLEMENTED_ERROR;
+int printall(Listnode *pStart, enum DIRECTION direction) {
+    if (pStart == NULL) {
+        printf("Liste ist leer.\n");
+        return -1;
+    }
+    int count = 1;
+    Listnode *p = pStart;
+    if (direction == FORWARD) {
+        while (p != NULL) {
+            printf("Inhalt vom %d. Element: %d\n", count++, p->daten);
+            p = p->pNext;
+        }
+    } else {
+        printf("Optional.\n");
+    }
+    return 0;
 }
 
 
@@ -112,8 +126,11 @@ int printall(enum DIRECTION direction)
 *  Return:    0         = Loeschen OK
 *         negative Werte = Fehler
 */
-void del_list(void)
-{
+void del_list(Listnode *pStart) {
+    Listnode *temp = pStart;
+    while (temp != NULL) {
+
+    }
 }
 
 
@@ -122,9 +139,34 @@ void del_list(void)
 *  Return:    0          = Loeschen OK
 *         negative Werte = Fehler
 */
-int del_entry(int position) /* Loeschen (delete) */
-{
-    return NOT_IMPLEMENTED_ERROR;
+int del_entry(Listnode *pStart, int position) {
+    // Fehlerabfrage, falls falsche Position übergeben wird
+    if (position <= 0 || position > get_anzentries(pStart)) {
+        printf("Position existiert nicht!\n");
+        return -1;
+    }
+
+    Listnode *p = pStart, *pTemp = pStart;
+    if (position == 1) {
+        pStart = pStart->pNext;
+        pTemp->pNext = NULL;
+    }
+
+    /*
+    printf("%p\n", p);
+    // zum Element vor dem zu löschenden gehen
+    for (int i = 0; i < position - 2; i++) {
+        p = p->pNext;
+        printf("%p\n", p);
+    }
+    pTemp = p->pNext;
+    p->pNext = pTemp->pNext;
+     */
+
+    free(pTemp);
+
+
+    return 0;
 }
 
 
